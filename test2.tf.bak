@@ -1,0 +1,45 @@
+variable "ingress_rules" {
+  type = list(object({
+    port   = number
+    source = string
+    destination = string
+  }))
+
+  default = [
+    {
+      port   = 22
+      source = "10.1.1.10/32"
+      destination = "50.1.1.10/32"
+    },
+    {
+      port   = 80
+      source = "10.1.1.20/32"
+      destination = "50.2.1.10/32"
+    },
+    {
+      port   = 443
+      source = "10.1.1.30/32"
+      destination = "50.3.1.10/32"
+    }
+  ]
+}
+
+resource "aws_security_group" "allow_tls" {
+  name        = "allow_tls"
+  description = "Allow TLS inbound traffic and all outbound traffic"
+  vpc_id      = aws_vpc.main.id
+
+  tags = {
+    Name = "allow_tls"
+  }
+}
+
+resource "aws_vpc_security_group_egress_rule" "example" {
+  security_group_id = aws_security_group.allow_tls.id
+
+  cidr_ipv4   = "10.0.0.0/8"
+  cidr_ipv4 = [var.ingress_rules.source]
+  from_port   = 80
+  ip_protocol = "tcp"
+  to_port     = 80
+}

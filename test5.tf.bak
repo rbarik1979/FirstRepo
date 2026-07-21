@@ -1,0 +1,32 @@
+variable "security_group_id" {
+  type    = string
+  default = "sg-068b18b63c60a3374"
+}
+
+data "aws_vpc_security_group_rules" "example1" {
+  filter {
+    name   = "group-id"
+    values = [var.security_group_id]
+  }
+}
+
+# Read details for every rule in the Security Group
+data "aws_vpc_security_group_rule" "rules" {
+  for_each = toset(data.aws_vpc_security_group_rules.example1.ids)
+
+  security_group_rule_id = each.value
+}
+
+output "security_group_rules_summary" {
+  value = [
+    for rule in data.aws_vpc_security_group_rule.rules : {
+      id          = rule.security_group_rule_id
+      direction   = rule.is_egress ? "egress" : "ingress"
+      protocol    = rule.ip_protocol
+      from_port   = rule.from_port
+      to_port     = rule.to_port
+      cidr_ipv4   = rule.cidr_ipv4
+      description = rule.description
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+/*
+variable "var_object1" {
+  type = list(object({Name=string,Location=string,Education=string,Roll_no=number}))
+  default = ([
+    { Name = "Rabindra", Location = "Kolkata", Education = "Engineering", Roll_no = 422 },
+    { Name = "Guni", Location = "Odisha", Education = "Graduate", Roll_no = 2342 },
+    { Name = "Bhai", Location = "Mumbai", Education = "Graduate", Roll_no = 2542 }
+    ])
+}
+
+*/
+
+variable "var_object1" {
+ type = list(object ({ Name = string , Location = string , pin=number}) )
+
+ default = (
+  [{Name = "Rabindra", Location = "Kolkata",pin=135},
+  {Name = "Guni", Location = "Odisha",pin=703}
+ ])
+}
+
+
+output "object_output" {
+  value = var.var_object1
+}

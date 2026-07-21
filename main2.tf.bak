@@ -1,0 +1,21 @@
+
+
+resource "aws_instance" "app_dev" {
+    for_each = var.ami
+    instance_type = "t2.micro"
+    ami = each.value
+
+    tags = {
+        Name = each.key
+        CreationDate =  formatdate("DD MMM YYYY hh:mm ZZZ", timestamp())
+    }
+}
+
+
+output "instance_name" { 
+    value = keys(var.ami)
+    }
+
+
+
+

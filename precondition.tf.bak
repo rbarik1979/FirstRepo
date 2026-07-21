@@ -1,0 +1,38 @@
+variable "db_password" {
+  type    = string
+  default = "ssdfsfsdfa"
+}
+
+
+data "aws_instances" "existing" {
+  instance_tags = {
+    Name = "test-instance1"
+  }
+}
+
+
+
+resource "aws_instance" "example" {
+  ami = "ami-0b6d9d3d33ba97d99"
+  instance_type = "t3.micro"
+
+  
+  lifecycle {
+ #   ignore_changes = [public_ip]
+    precondition {
+      condition     = length(var.db_password) >= 12
+      error_message = "Password must be at least 12 characters long."
+    }
+
+    postcondition {
+      condition     = self.public_ip != ""
+      error_message = "public IP created & may invite cost. please delete public IP"
+    }
+
+  }
+}
+
+
+output "server_status" {
+  value = aws_instance.example.public_ip
+}

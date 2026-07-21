@@ -1,0 +1,15 @@
+data "aws_security_groups" "all" {}
+
+output "all_security_groups" {
+  value = data.aws_security_groups.all.ids
+}
+
+data "aws_vpc_security_group_rules" "sg_rules" {
+  for_each = toset(data.aws_security_groups.all.ids)
+
+  filter {
+    name   = "group-id"
+    values = [each.value]
+  }
+}
+

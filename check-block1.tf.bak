@@ -1,0 +1,11 @@
+check "website_check" {
+  data "http" "check1" {
+    url = " https//httpstat.us/404"
+  }
+
+  assert {
+    condition     = data.http.check1.status_code == 200
+    error_message = "the website under http1 is not working. please check. proceeding next..."
+  }
+}
+

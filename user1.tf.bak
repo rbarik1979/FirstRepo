@@ -1,0 +1,15 @@
+resource "aws_iam_user" "first" {
+    name = "first"
+    depends_on = [aws_iam_user.second]
+}
+
+resource "aws_iam_user" "second" {
+    name = "second"
+    depends_on = [aws_iam_user.user_third]
+}
+
+resource "aws_iam_user" "user_third" {
+    name = "user_third"
+#    depends_on = [aws_iam_user.second]
+}
+

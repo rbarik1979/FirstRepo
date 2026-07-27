@@ -11,8 +11,7 @@ variable "tag_name" {
 variable "ami" {
   type = map(any)
   default = {
-    #    "server-1" = "ami-01edba92f9036f76e"
-    "server-2" = "ami-0fd6b4bfb40773c2d"
+      "server-2" = "ami-0fd6b4bfb40773c2d"
     #      "ap-south-1" = "ami-0b910d1016287a5e7"
   }
 
